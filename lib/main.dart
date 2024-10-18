@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'signup.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SignUp(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -58,4 +66,36 @@ class _MyHomePageState extends State<MyHomePage> {
  
     );
   }
+}
+
+void addIncome() {
+
+}
+
+void updateIncome() {
+
+}
+
+void addExpense() {
+
+}
+
+void removeExpense() {
+
+}
+
+void addWants() {
+
+}
+
+void removeWants() {
+
+}
+
+void addSavings() {
+
+}
+
+void removeSavings() {
+
 }
