@@ -66,3 +66,35 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+void addIncome() {
+
+}
+
+void updateIncome() {
+
+}
+
+void addExpense() {
+
+}
+
+void removeExpense() {
+
+}
+
+void addWants() {
+
+}
+
+void removeWants() {
+
+}
+
+void addSavings() {
+
+}
+
+void removeSavings() {
+
+}
