@@ -67,23 +67,46 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-void addIncome() {
 
-}
+
+void _insertEssentials(String Name, double Amount) async {
+    // Row to insert
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnName: Name,
+      DatabaseHelper.columnAmount: Amount,
+    };
+    final id = await dbHelper.insertEssential(row);
+    debugPrint('Inserted row id: $id');
+  }
+
 
 void updateIncome() {
 
 }
 
-void addExpense() {
+void _insertWants(String Name, double Amount) async {
+    // Row to insert
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnName: Name,
+      DatabaseHelper.columnAmount: Amount,
+    };
+    final id = await dbHelper.insertWants(row);
+    debugPrint('Inserted row id: $id');
+  }
 
-}
+
+
+void _insertSavings(String Name, double Amount) async {
+    // Row to insert
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnName: Name,
+      DatabaseHelper.columnAmount: Amount,
+    };
+    final id = await dbHelper.insertSavings(row);
+    debugPrint('Inserted row id: $id');
+  }
 
 void removeExpense() {
-
-}
-
-void addWants() {
 
 }
 
@@ -91,9 +114,6 @@ void removeWants() {
 
 }
 
-void addSavings() {
-
-}
 
 void removeSavings() {
 

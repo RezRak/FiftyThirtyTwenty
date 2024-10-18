@@ -6,7 +6,7 @@ class DatabaseHelper {
   static const _databaseName = "MyDatabase.db";
   static const _databaseVersion = 1;
 
-  static const expenses = 'my_expenses';
+  static const essentials = 'my_essentials';
   static const wants = 'my_wants';
   static const savings = 'my_savings';
 
@@ -34,7 +34,7 @@ class DatabaseHelper {
 
 Future<void> _createTables(Database db) async {
   await db.execute('''
-  CREATE TABLE $expenses (
+  CREATE TABLE $essentials (
     $columnID INTEGER PRIMARY KEY AUTOINCREMENT,
     $columnName TEXT NOT NULL,
     $columnAmount INTEGER PRIMARY KEY
@@ -57,3 +57,16 @@ Future<void> _createTables(Database db) async {
   )
   ''');
 }
+
+
+Future<int> insertEssential(Map<String, dynamic> row) async {
+    return await _db.insert(essentials, row);
+  }
+
+Future<int> insertWants(Map<String, dynamic> row) async {
+    return await _db.insert(wants, row);
+  }
+
+Future<int> insertSavings(Map<String, dynamic> row) async {
+    return await _db.insert(savings, row);
+  }
