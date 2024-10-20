@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ftt/signup.dart';
 import 'database.dart';
-
 
 final dbHelper = DatabaseHelper();
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: SignUp(),
     );
   }
 }
