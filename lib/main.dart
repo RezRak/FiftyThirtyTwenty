@@ -68,6 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 
+void updateIncome() {
+
+}
 
 void _insertEssentials(String Name, double Amount) async {
     // Row to insert
@@ -79,10 +82,6 @@ void _insertEssentials(String Name, double Amount) async {
     debugPrint('Inserted row id: $id');
   }
 
-
-void updateIncome() {
-
-}
 
 void _insertWants(String Name, double Amount) async {
     // Row to insert
@@ -106,15 +105,18 @@ void _insertSavings(String Name, double Amount) async {
     debugPrint('Inserted row id: $id');
   }
 
-void removeExpense() {
-
+void removeExpense(int id) async {
+  final rowsDeleted = await dbHelper.deleteEssential(id);
+  debugPrint('Deleted $rowsDeleted row(s): row $id');
 }
 
-void removeWants() {
-
+void removeWants(int id) async {
+  final rowsDeleted = await dbHelper.deleteWants(id);
+  debugPrint('Deleted $rowsDeleted row(s): row $id');
 }
 
 
-void removeSavings() {
-
+void removeSavings(int id) async {
+  final rowsDeleted = await dbHelper.deleteSavings(id);
+  debugPrint('Deleted $rowsDeleted row(s): row $id');
 }
