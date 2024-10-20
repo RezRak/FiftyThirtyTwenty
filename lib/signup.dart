@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
-
+import 'main.dart'; // Make sure this imports your DatabaseHelper
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -10,7 +9,17 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final TextEditingController incomeController = TextEditingController();
+  final TextEditingController essentialNameController = TextEditingController();
+  final TextEditingController essentialAmountController = TextEditingController();
+  final TextEditingController wantNameController = TextEditingController();
+  final TextEditingController wantAmountController = TextEditingController();
+  final TextEditingController savingNameController = TextEditingController();
+  final TextEditingController savingAmountController = TextEditingController();
 
+  List<Map<String, dynamic>> essentials = [];
+  List<Map<String, dynamic>> wants = [];
+  List<Map<String, dynamic>> savings = [];
 
   @override
   Widget build(BuildContext context) {
@@ -19,78 +28,102 @@ class _SignUpState extends State<SignUp> {
         title: Text("Initialization"),
       ),
       body: Center(
-
         child: Column(
-  
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text("Monthly Income"),
             TextField(
-              obscureText: true,
+              controller: incomeController,
+              obscureText: false,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Income',
-              )
+              ),
             ),
-            ElevatedButton(onPressed: onPressed, child: Text("Add")),
+            ElevatedButton(
+              onPressed: () {
+                // Handle adding income
+              },
+              child: Text("Add"),
+            ),
 
             Text("Essentials"),
             TextField(
-              obscureText: true,
+              controller: essentialNameController,
+              obscureText: false,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Name',
-              )
+              ),
             ),
             TextField(
-              obscureText: true,
+              controller: essentialAmountController,
+              obscureText: false,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Amount',
-              )
+              ),
             ),
-            ElevatedButton(onPressed: onPressed, child: Text("Add")),
+            ElevatedButton(
+              onPressed: () {
+                // Handle adding essentials
+              },
+              child: Text("Add"),
+            ),
 
             Text("Wants"),
             TextField(
-              obscureText: true,
+              controller: wantNameController,
+              obscureText: false,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Name',
-              )
+              ),
             ),
             TextField(
-              obscureText: true,
+              controller: wantAmountController,
+              obscureText: false,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Amount',
-              )
+              ),
             ),
-            ElevatedButton(onPressed: onPressed, child: Text("Add")),
+            ElevatedButton(
+              onPressed: () {
+                // Handle adding wants
+              },
+              child: Text("Add"),
+            ),
 
             Text("Savings"),
             TextField(
-              obscureText: true,
+              controller: savingNameController,
+              obscureText: false,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Name',
-              )
+              ),
             ),
             TextField(
-              obscureText: true,
+              controller: savingAmountController,
+              obscureText: false,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Amount',
-              )
+              ),
             ),
-            ElevatedButton(onPressed: onPressed, child: Text("Add")),
-            
+            ElevatedButton(
+              onPressed: () {
+                // Handle adding savings
+              },
+              child: Text("Add"),
+            ),
           ],
-      
-        )
-      
-      
-      
+        ),
+      ),
+    );
+  }
+}
       
       //   ListView.builder(
         
@@ -109,6 +142,3 @@ class _SignUpState extends State<SignUp> {
       //     );
       //   },
       // ),
-    );
-  }
-}
