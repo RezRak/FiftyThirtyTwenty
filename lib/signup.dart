@@ -18,9 +18,22 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController savingNameController = TextEditingController();
   final TextEditingController savingAmountController = TextEditingController();
 
-  void clearText() {
-    essentialAmountController.clear();
-    essentialNameController.clear();
+  void clearText(state) {
+    if(state == 'essential') {
+      essentialAmountController.clear();
+      essentialNameController.clear();
+    }
+    else if(state == 'want') {
+      wantAmountController.clear();
+      wantNameController.clear();
+    }
+    else if(state == 'savings'){
+      savingAmountController.clear();
+      savingNameController.clear();
+    }
+    else if(state == 'income') {
+      incomeController.clear();
+    }
   }
 
   @override
@@ -45,6 +58,7 @@ class _SignUpState extends State<SignUp> {
             ElevatedButton(
               onPressed: () {
                 insertIncome(essentialAmountController);
+                clearText('income');
               },
               child: Text("Add"),
             ),
@@ -71,7 +85,7 @@ class _SignUpState extends State<SignUp> {
             ElevatedButton(
               onPressed: () {
                 insertEssentials(essentialNameController.text, essentialAmountController);
-                clearText();
+                clearText('essential');
               },
               child: Text("Add"),
             ),
@@ -96,7 +110,7 @@ class _SignUpState extends State<SignUp> {
             ElevatedButton(
               onPressed: () {
                 insertWants(essentialNameController.text, essentialAmountController);
-                clearText();
+                clearText('want');
               },
               child: Text("Add"),
             ),
@@ -121,7 +135,7 @@ class _SignUpState extends State<SignUp> {
             ElevatedButton(
               onPressed: () {
                 insertSavings(essentialNameController.text, essentialAmountController);
-                clearText();
+                clearText('savings');
               },
               child: Text("Add"),
             ),
