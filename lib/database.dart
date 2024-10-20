@@ -9,11 +9,12 @@ class DatabaseHelper {
   static const essentials = 'my_essentials';
   static const wants = 'my_wants';
   static const savings = 'my_savings';
+  static const income = 'my_income';
 
   static const columnID = '_id';
   static const columnName = 'name';
   static const columnAmount = 'amount';
-  static const income = 'income';
+
 
   late Database _db;
 
@@ -55,6 +56,17 @@ class DatabaseHelper {
       $columnAmount INTEGER NOT NULL
     )
     ''');
+
+    await db.execute('''
+    CREATE TABLE $income (
+      $columnAmount INTEGER NOT NULL
+    )
+    ''');
+
+  }
+
+  Future<int> insertIncome(Map<String, dynamic> row) async {
+    return await _db.insert(income, row);
   }
 
   Future<int> insertEssential(Map<String, dynamic> row) async {
@@ -67,6 +79,14 @@ class DatabaseHelper {
 
   Future<int> insertSavings(Map<String, dynamic> row) async {
     return await _db.insert(savings, row);
+  }
+
+  Future<int> deleteIncome(int id) async {
+    return await _db.delete(
+      income,
+      where: '$columnID = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<int> deleteEssential(int id) async {
@@ -91,6 +111,10 @@ class DatabaseHelper {
       where: '$columnID = ?',
       whereArgs: [id],
     );
+  }
+
+  Future<List<Map<String, dynamic>>> queryIncome() async {
+    return await _db.query(income);
   }
 
   Future<List<Map<String, dynamic>>> queryEssentials() async {

@@ -68,11 +68,15 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 
-void updateIncome() {
-
+void insertIncome(Amount) async {
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnAmount: Amount,
+    };
+    final id = await dbHelper.insertEssential(row);
+    debugPrint('Inserted row id: $id'); 
 }
 
-void _insertEssentials(String Name, double Amount) async {
+void insertEssentials(String Name, Amount) async {
     // Row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnName: Name,
@@ -83,7 +87,7 @@ void _insertEssentials(String Name, double Amount) async {
   }
 
 
-void _insertWants(String Name, double Amount) async {
+void insertWants(String Name, Amount) async {
     // Row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnName: Name,
@@ -95,7 +99,7 @@ void _insertWants(String Name, double Amount) async {
 
 
 
-void _insertSavings(String Name, double Amount) async {
+void insertSavings(String Name, Amount) async {
     // Row to insert
     Map<String, dynamic> row = {
       DatabaseHelper.columnName: Name,
@@ -104,6 +108,11 @@ void _insertSavings(String Name, double Amount) async {
     final id = await dbHelper.insertSavings(row);
     debugPrint('Inserted row id: $id');
   }
+
+void removeIncome(int id) async {
+  final rowsDeleted = await dbHelper.deleteIncome(id);
+  debugPrint('Deleted $rowsDeleted row(s): row $id');
+}
 
 void removeExpense(int id) async {
   final rowsDeleted = await dbHelper.deleteEssential(id);

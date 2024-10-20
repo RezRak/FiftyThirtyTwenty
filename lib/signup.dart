@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'main.dart'; // Make sure this imports your DatabaseHelper
+import 'main.dart';
+import 'database.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -20,6 +21,11 @@ class _SignUpState extends State<SignUp> {
   List<Map<String, dynamic>> essentials = [];
   List<Map<String, dynamic>> wants = [];
   List<Map<String, dynamic>> savings = [];
+
+  void clearText() {
+    essentialAmountController.clear();
+    essentialNameController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +62,8 @@ class _SignUpState extends State<SignUp> {
                 labelText: 'Name',
               ),
             ),
+
+
             TextField(
               controller: essentialAmountController,
               obscureText: false,
@@ -66,7 +74,8 @@ class _SignUpState extends State<SignUp> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Handle adding essentials
+                insertEssentials(essentialNameController.text, essentialAmountController);
+                clearText();
               },
               child: Text("Add"),
             ),
@@ -90,7 +99,8 @@ class _SignUpState extends State<SignUp> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Handle adding wants
+                insertWants(essentialNameController.text, essentialAmountController);
+                clearText();
               },
               child: Text("Add"),
             ),
@@ -114,7 +124,8 @@ class _SignUpState extends State<SignUp> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Handle adding savings
+                insertSavings(essentialNameController.text, essentialAmountController);
+                clearText();
               },
               child: Text("Add"),
             ),
