@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
-import 'database.dart';
+import 'home.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -17,10 +17,6 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController wantAmountController = TextEditingController();
   final TextEditingController savingNameController = TextEditingController();
   final TextEditingController savingAmountController = TextEditingController();
-
-  List<Map<String, dynamic>> essentials = [];
-  List<Map<String, dynamic>> wants = [];
-  List<Map<String, dynamic>> savings = [];
 
   void clearText() {
     essentialAmountController.clear();
@@ -48,7 +44,7 @@ class _SignUpState extends State<SignUp> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Handle adding income
+                insertIncome(essentialAmountController);
               },
               child: Text("Add"),
             ),
@@ -129,27 +125,19 @@ class _SignUpState extends State<SignUp> {
               },
               child: Text("Add"),
             ),
+            SizedBox(width: 10, height: 10),
+            ElevatedButton(
+              onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const Home()));
+              },
+              child: Text("Submit"),
+            )
           ],
         ),
-      ),
+      )
     );
   }
 }
       
-      //   ListView.builder(
-        
-        
-      //   itemBuilder: (context, index) {
-      //     return ListTile(
-      //       title: Text(recipes[index]['Name']!),
-      //       onTap: () {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (context) => DetailsScreen(recipe: recipes[index]),
-      //           ),
-      //         );
-      //       },
-      //     );
-      //   },
-      // ),
