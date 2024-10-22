@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ftt/signup.dart';
 import 'database.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 final dbHelper = DatabaseHelper();
 
