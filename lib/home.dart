@@ -4,10 +4,14 @@ import 'main.dart';
 import 'database.dart';
 
 
-  void main() {
-    runApp(const Home());
-  }
+void main() {
+  runApp(const Home());
+}
 
+void getUpdateData() {
+
+
+}
 
 
 class Home extends StatelessWidget {
@@ -21,21 +25,21 @@ class Home extends StatelessWidget {
       PieChartData(
         sections: [
           PieChartSectionData(
-            value: 20,
+            value: value1,
             color: Colors.blue,
           ),
           PieChartSectionData(
-            value: 20,
-            color: Colors.blue,
-          ),
-
-          PieChartSectionData(
-            value: 20,
+            value: value2,
             color: Colors.blue,
           ),
 
           PieChartSectionData(
-            value: 20,
+            value: value3,
+            color: Colors.blue,
+          ),
+
+          PieChartSectionData(
+            value: value4,
             color: Colors.blue,
           ),
         ]
