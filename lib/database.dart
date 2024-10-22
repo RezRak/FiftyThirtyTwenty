@@ -128,4 +128,49 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> querySavings() async {
     return await _db.query(savings);
   }
+
+
+  Future<int> sumEssentials() async {
+    final List<Map<String, dynamic>> result = await _db.query(
+      'essentials',
+      columns: ['columnAmount'],
+    );
+
+    int E_total = result.fold(0, (sum, row) => sum + (row['columnAmount'] as int));
+
+    return E_total;
+  }
+
+  Future<int> sumWants() async {
+    final List<Map<String, dynamic>> result = await _db.query(
+      'wants',
+      columns: ['columnAmount'],
+    );
+
+    int W_total = result.fold(0, (sum, row) => sum + (row['columnAmount'] as int));
+
+    return W_total;
+  }
+
+  Future<int> sumSavings() async {
+    final List<Map<String, dynamic>> result = await _db.query(
+      'savings',
+      columns: ['columnAmount'],
+    );
+
+    int S_total = result.fold(0, (sum, row) => sum + (row['columnAmount'] as int));
+
+    return S_total;
+  }
+
+  Future<int> sumIncome() async {
+    final List<Map<String, dynamic>> result = await _db.query(
+      'income',
+      columns: ['columnAmount'],
+    );
+
+    int I_total = result.fold(0, (sum, row) => sum + (row['columnAmount'] as int));
+
+    return I_total;
+  }
 }

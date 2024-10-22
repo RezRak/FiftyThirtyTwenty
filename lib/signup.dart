@@ -84,7 +84,7 @@ class _SignUpState extends State<SignUp> {
             ),
             ElevatedButton(
               onPressed: () {
-                insertEssentials(essentialNameController.text, essentialAmountController);
+                insertEssentials(essentialNameController.text, essentialAmountController.value);
                 clearText('essential');
               },
               child: Text("Add"),
@@ -109,7 +109,7 @@ class _SignUpState extends State<SignUp> {
             ),
             ElevatedButton(
               onPressed: () {
-                insertWants(essentialNameController.text, essentialAmountController);
+                insertWants(essentialNameController.text, essentialAmountController.value);
                 clearText('want');
               },
               child: Text("Add"),
@@ -134,7 +134,7 @@ class _SignUpState extends State<SignUp> {
             ),
             ElevatedButton(
               onPressed: () {
-                insertSavings(essentialNameController.text, essentialAmountController);
+                insertSavings(essentialNameController.text, essentialAmountController.value);
                 clearText('savings');
               },
               child: Text("Add"),
