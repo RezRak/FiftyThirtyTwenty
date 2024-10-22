@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'database.dart';
 import 'main.dart';
 
-void main() {
-  runApp(const Home());
-}
-
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -34,11 +30,17 @@ class _HomeState extends State<Home> {
 
     // Update the state with the fetched values
     setState(() {
-      value1 = income.toDouble();
-      value2 = essential.toDouble();
-      value3 = wants.toDouble();
-      value4 = savings.toDouble();
+      if (income != 0) {
+        value1 = (essential.toDouble() / income.toDouble()) * 100;
+        value2 = (wants.toDouble() / income.toDouble()) * 100;
+        value3 = (savings.toDouble() / income.toDouble()) * 100;
+        value4 = 100 - (value1 + value2 + value3);
+      } else {
+        value1 = value2 = value3 = value4 = 0;
+      }
     });
+
+    print('Values: value1=$value1, value2=$value2, value3=$value3, value4=$value4');
   }
 
   @override
@@ -47,32 +49,41 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text('Pie Chart Example'),
       ),
-      body: PieChart(
-        swapAnimationDuration: const Duration(milliseconds: 250),
-        swapAnimationCurve: Curves.bounceIn,
-        PieChartData(
-          sections: [
-            PieChartSectionData(
-              value: value1,
-              color: Colors.blue,
-              title: value1.toString(),
+      body: Center(
+        child: Container(
+          height: 300,
+          child: PieChart(
+            PieChartData(
+              sections: [
+                PieChartSectionData(
+                  value: value1,
+                  color: Colors.blue,
+                  title: 'Essentials\n${value1.toStringAsFixed(1)}%',
+                  radius: 80
+                ),
+                PieChartSectionData(
+                  value: value2,
+                  color: Colors.green,
+                  title: 'Wants\n${value2.toStringAsFixed(1)}%',
+                  radius: 80
+                ),
+                PieChartSectionData(
+                  value: value3,
+                  color: Colors.yellow,
+                  title: 'Savings\n${value3.toStringAsFixed(1)}%',
+                  radius: 80
+                ),
+                PieChartSectionData(
+                  value: value4,
+                  color: Colors.red,
+                  title: 'Remaining\n${value4.toStringAsFixed(1)}%',
+                  radius: 80
+                ),
+              ],
+              sectionsSpace: 2,
+              centerSpaceRadius: 40,
             ),
-            PieChartSectionData(
-              value: value2,
-              color: Colors.green,
-              title: value2.toString(),
-            ),
-            PieChartSectionData(
-              value: value3,
-              color: Colors.yellow,
-              title: value3.toString(),
-            ),
-            PieChartSectionData(
-              value: value4,
-              color: Colors.red,
-              title: value4.toString(),
-            ),
-          ],
+          ),
         ),
       ),
     );

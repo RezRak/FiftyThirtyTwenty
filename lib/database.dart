@@ -15,7 +15,6 @@ class DatabaseHelper {
   static const columnName = 'name';
   static const columnAmount = 'amount';
 
-
   late Database _db;
 
   Future<void> init() async {
@@ -59,10 +58,10 @@ class DatabaseHelper {
 
     await db.execute('''
     CREATE TABLE $income (
+      $columnID INTEGER PRIMARY KEY AUTOINCREMENT,
       $columnAmount INTEGER NOT NULL
     )
     ''');
-
   }
 
   Future<int> insertIncome(Map<String, dynamic> row) async {
@@ -129,48 +128,47 @@ class DatabaseHelper {
     return await _db.query(savings);
   }
 
-
   Future<int> sumEssentials() async {
     final List<Map<String, dynamic>> result = await _db.query(
-      'essentials',
-      columns: ['columnAmount'],
+      essentials,
+      columns: [columnAmount],
     );
 
-    int E_total = result.fold(0, (sum, row) => sum + (row['columnAmount'] as int));
+    int total = result.fold(0, (sum, row) => sum + (row[columnAmount] as int));
 
-    return E_total;
+    return total;
   }
 
   Future<int> sumWants() async {
     final List<Map<String, dynamic>> result = await _db.query(
-      'wants',
-      columns: ['columnAmount'],
+      wants,
+      columns: [columnAmount],
     );
 
-    int W_total = result.fold(0, (sum, row) => sum + (row['columnAmount'] as int));
+    int total = result.fold(0, (sum, row) => sum + (row[columnAmount] as int));
 
-    return W_total;
+    return total;
   }
 
   Future<int> sumSavings() async {
     final List<Map<String, dynamic>> result = await _db.query(
-      'savings',
-      columns: ['columnAmount'],
+      savings,
+      columns: [columnAmount],
     );
 
-    int S_total = result.fold(0, (sum, row) => sum + (row['columnAmount'] as int));
+    int total = result.fold(0, (sum, row) => sum + (row[columnAmount] as int));
 
-    return S_total;
+    return total;
   }
 
   Future<int> sumIncome() async {
     final List<Map<String, dynamic>> result = await _db.query(
-      'income',
-      columns: ['columnAmount'],
+      income,
+      columns: [columnAmount],
     );
 
-    int I_total = result.fold(0, (sum, row) => sum + (row['columnAmount'] as int));
+    int total = result.fold(0, (sum, row) => sum + (row[columnAmount] as int));
 
-    return I_total;
+    return total;
   }
 }
