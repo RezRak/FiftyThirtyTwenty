@@ -4,6 +4,7 @@ import 'package:ftt/needs.dart';
 import 'package:ftt/savings.dart';
 import 'package:ftt/wants.dart';
 import 'main.dart';
+import 'signup.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -110,8 +111,16 @@ Future<void> getUpdateData() async {
       ),
       body: Column(
         children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: ElevatedButton(onPressed:  () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUp()));
+            }, 
+            child: 
+              const Icon(Icons.edit))
+          ),
           SizedBox(
-            height: 500,
+            height: 400,
             width: double.infinity,
             child: Stack(
               alignment: Alignment.center,
@@ -172,7 +181,7 @@ Future<void> getUpdateData() async {
           ),
           const SizedBox(height: 5),
           Container(height: 2, color: Colors.black, width: double.infinity),
-          const SizedBox(height: 50),
+          const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -197,7 +206,7 @@ Future<void> getUpdateData() async {
               ],
             ),
           ),
-          const SizedBox(height: 60),
+          const SizedBox(height: 25),
           Container(height: 2, color: Colors.black, width: double.infinity),
           const Spacer(),
           Row(
@@ -205,7 +214,7 @@ Future<void> getUpdateData() async {
             children: [
               TextButton(
                 onPressed: () {},
-                child: const Text('Home'),
+                child: const Icon(Icons.home),
               ),
               TextButton(
                 onPressed: () {
@@ -214,7 +223,7 @@ Future<void> getUpdateData() async {
                     MaterialPageRoute(builder: (context) => const Essential()),
                   );
                 },
-                child: const Text('Essentials'),
+                child: const Icon(Icons.business),
               ),
               TextButton(
                 onPressed: () {
@@ -223,7 +232,7 @@ Future<void> getUpdateData() async {
                     MaterialPageRoute(builder: (context) => const Want()),
                   );
                 },
-                child: const Text('Wants'),
+                child: const Icon(Icons.favorite),
               ),
               TextButton(
                 onPressed: () {
@@ -232,7 +241,7 @@ Future<void> getUpdateData() async {
                     MaterialPageRoute(builder: (context) => const Saving()),
                   );
                 },
-                child: const Text('Savings'),
+                child: const Icon(Icons.attach_money),
               ),
             ],
           ),

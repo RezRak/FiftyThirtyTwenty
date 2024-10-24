@@ -195,7 +195,7 @@ class _SavingState extends State<Saving> {
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.transparent,
                 ),
-                child: Text('Home'),
+                child: const Icon(Icons.home),
               ),
               TextButton(
                 onPressed: () {
@@ -207,7 +207,7 @@ class _SavingState extends State<Saving> {
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.transparent,
                 ),
-                child: Text('Essentials'),
+                child: const Icon(Icons.business),
               ),
               TextButton(
                 onPressed: () {
@@ -219,7 +219,7 @@ class _SavingState extends State<Saving> {
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.transparent,
                 ),
-                child: Text('Wants'),
+                child: const Icon(Icons.favorite),
               ),
               TextButton(
                 onPressed: () {
@@ -227,7 +227,7 @@ class _SavingState extends State<Saving> {
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.transparent,
                 ),
-                child: Text('Savings'),
+                child: const Icon(Icons.attach_money),
               ),
             ],
           ),
