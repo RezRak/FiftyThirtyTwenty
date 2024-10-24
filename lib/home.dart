@@ -51,23 +51,23 @@ Future<void> getUpdateData() async {
       double wantsLimit = 30.0;
       double savingsLimit = 20.0;
 
-      // Essentials Text if statement
-      if (value1 > essentialsLimit) {
-        essentialsMessage = "You're Spending ${(value1 - essentialsLimit).toStringAsFixed(1)}% over the limit";
-      } else if (value1 < essentialsLimit) {
-        essentialsMessage = "You've spent less than target by ${(essentialsLimit - value1).toStringAsFixed(1)}%";
-      } else {
-        essentialsMessage = "You're on Track";
-      }
+        // Essentials Text if statement
+        if (value1 > essentialsLimit) {
+          essentialsMessage = "You're Spending ${(value1 - essentialsLimit).toStringAsFixed(1)}% over the limit";
+        } else if (value1 < essentialsLimit) {
+          essentialsMessage = "You've spent less than essentials target by ${(essentialsLimit - value1).toStringAsFixed(1)}%";
+        } else {
+          essentialsMessage = "You're on Track";
+        }
 
-      // Wants Text if statement
-      if (value2 > wantsLimit) {
-        wantsMessage = "You're Spending ${(value2 - wantsLimit).toStringAsFixed(1)}% over the limit";
-      } else if (value2 < wantsLimit) {
-        wantsMessage = "You've spent less than target by ${(wantsLimit - value2).toStringAsFixed(1)}%";
-      } else {
-        wantsMessage = "You're on Track";
-      }
+        // Wants Text if statement
+        if (value2 > wantsLimit) {
+          wantsMessage = "You're Spending ${(value2 - wantsLimit).toStringAsFixed(1)}% over the limit";
+        } else if (value2 < wantsLimit) {
+          wantsMessage = "You've spent less than wants target by ${(wantsLimit - value2).toStringAsFixed(1)}%";
+        } else {
+          wantsMessage = "You're on Track";
+        }
 
       // Savings Text if statement
       if (value3 < savingsLimit) {
