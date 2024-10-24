@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'database.dart';
 import 'main.dart';
 import 'home.dart';
 import 'savings.dart';
@@ -30,18 +29,21 @@ class _EssentialState extends State<Essential> {
   }
 
   Future<void> getUpdateData() async {
-    int income = await dbHelper.sumIncome();
+    // Grab int values from each table
+    int income = await dbHelper.sumIncome(); 
     int essential = await dbHelper.sumEssentials();
     int wants = await dbHelper.sumWants();
     int savings = await dbHelper.sumSavings();
 
     setState(() {
+      // Gathers the percentage of each value to add into pie chart later
       if (income != 0) {
         value1 = (essential.toDouble() / income.toDouble()) * 100;
         value2 = (wants.toDouble() / income.toDouble()) * 100;
         value3 = (savings.toDouble() / income.toDouble()) * 100;
         value4 = 100 - (value1 + value2 + value3);
 
+        // Test to see if user is over or under budget
         double essentialsLimit = 50.0;
         double wantsLimit = 30.0;
         double savingsLimit = 20.0;
@@ -83,9 +85,16 @@ class _EssentialState extends State<Essential> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0), 
+          child: Container(
+            color: Colors.black,
+            height: 2.0
+          )),
         backgroundColor: Colors.white,
-        title: Text("Home"),
+        title: Text("Essentials"),
         actions: [
+          // Adds the logo on the appbar
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: Image.asset(
@@ -102,6 +111,7 @@ class _EssentialState extends State<Essential> {
           Container(
             height: 500,
             width: double.infinity,
+            // Piechart data and UI
             child: PieChart(
               PieChartData(
                 sections: [
@@ -140,6 +150,7 @@ class _EssentialState extends State<Essential> {
             ),
           ),
           SizedBox(height: 5),
+          // Black line between Pie chart and Text information
           Container(
             height: 2,
             color: Colors.black,
@@ -147,6 +158,7 @@ class _EssentialState extends State<Essential> {
           ),
           SizedBox(height: 50),
           Padding(
+            // Text for determining if over or under budget
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               children: [
@@ -170,12 +182,14 @@ class _EssentialState extends State<Essential> {
               ],
             ),
           ),         
+          // Second black line for the bottom button bar
           SizedBox(height: 60),
           Container(
             height: 2,
             color: Colors.black,
             width: double.infinity,
           ),
+          // Creates buttons for Navigation to other tabs
           Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

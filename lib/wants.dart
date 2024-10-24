@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'database.dart';
 import 'main.dart';
 import 'home.dart';
 import 'savings.dart';
@@ -83,8 +82,14 @@ class _WantState extends State<Want> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0), 
+          child: Container(
+            color: Colors.black,
+            height: 2.0
+          )),
         backgroundColor: Colors.white,
-        title: Text("Home"),
+        title: Text("Wants"),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),

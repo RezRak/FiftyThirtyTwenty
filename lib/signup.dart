@@ -10,6 +10,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  // Adds Text to CRUD tables
   final TextEditingController incomeController = TextEditingController();
   final TextEditingController essentialNameController = TextEditingController();
   final TextEditingController essentialAmountController = TextEditingController();
@@ -19,6 +20,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController savingAmountController = TextEditingController();
 
   void clearText(String state) {
+    // clears text box after clicking enter
     if (state == 'essential') {
       essentialAmountController.clear();
       essentialNameController.clear();
@@ -36,7 +38,14 @@ class _SignUpState extends State<SignUp> {
 @override
 Widget build(BuildContext context) {
   return Scaffold(
+    //appbar with logo
     appBar: AppBar(
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0), 
+          child: Container(
+            color: Colors.black,
+            height: 2.0
+          )),
       backgroundColor: Colors.white,
       title: Text("Sign Up"),
       actions: [
@@ -57,6 +66,7 @@ Widget build(BuildContext context) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            // Text input for monthly income
             Text(
               "Monthly Income",
               style: TextStyle(fontSize: 18),
@@ -81,6 +91,7 @@ Widget build(BuildContext context) {
               ),
             ),
             SizedBox(height: 20),
+            // Text input for essentials
             Text(
               "Essentials",
               style: TextStyle(fontSize: 18),
@@ -114,6 +125,7 @@ Widget build(BuildContext context) {
               ),
             ),
             SizedBox(height: 20),
+            // Text input for wants
             Text(
               "Wants",
               style: TextStyle(fontSize: 18),
@@ -147,6 +159,7 @@ Widget build(BuildContext context) {
               ),
             ),
             SizedBox(height: 20),
+            // Text input for savings
             Text(
               "Savings",
               style: TextStyle(fontSize: 18),
