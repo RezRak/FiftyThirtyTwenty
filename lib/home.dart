@@ -197,7 +197,7 @@ class _HomeState extends State<Home> {
                 onPressed: () {
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.transparent, // Optional: set background color
+                  backgroundColor: Colors.transparent,
                 ),
                 child: Text('Wants'),
               ),
@@ -205,7 +205,7 @@ class _HomeState extends State<Home> {
                 onPressed: () {
                 },
                 style: TextButton.styleFrom(
-                  backgroundColor: Colors.transparent, // Optional: set background color
+                  backgroundColor: Colors.transparent,
                 ),
                 child: Text('Savings'),
               ),
