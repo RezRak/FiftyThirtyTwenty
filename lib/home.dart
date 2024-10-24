@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
         if (value1 > essentialsLimit) {
           essentialsMessage = "You're Spending ${(value1 - essentialsLimit).toStringAsFixed(1)}% over the limit";
         } else if (value1 < essentialsLimit) {
-          essentialsMessage = "You've spent less than target by ${(essentialsLimit - value1).toStringAsFixed(1)}%";
+          essentialsMessage = "You've spent less than essentials target by ${(essentialsLimit - value1).toStringAsFixed(1)}%";
         } else {
           essentialsMessage = "You're on Track";
         }
@@ -61,7 +61,7 @@ class _HomeState extends State<Home> {
         if (value2 > wantsLimit) {
           wantsMessage = "You're Spending ${(value2 - wantsLimit).toStringAsFixed(1)}% over the limit";
         } else if (value2 < wantsLimit) {
-          wantsMessage = "You've spent less than target by ${(wantsLimit - value2).toStringAsFixed(1)}%";
+          wantsMessage = "You've spent less than wants target by ${(wantsLimit - value2).toStringAsFixed(1)}%";
         } else {
           wantsMessage = "You're on Track";
         }
