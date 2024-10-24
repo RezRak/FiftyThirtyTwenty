@@ -38,7 +38,7 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       backgroundColor: Colors.white,
-      title: Text("Initialization"),
+      title: Text("Sign Up"),
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
