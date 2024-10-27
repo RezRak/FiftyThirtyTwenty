@@ -1,10 +1,10 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:ftt/needs.dart';
-import 'package:ftt/savings.dart';
-import 'package:ftt/wants.dart';
 import 'main.dart';
 import 'signup.dart';
+import 'needs.dart';
+import 'wants.dart';
+import 'savings.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,13 +17,13 @@ class _HomeState extends State<Home> {
   double value1 = 0;
   double value2 = 0;
   double value3 = 0;
-  double value4 = 0;
+  double value4 = 0; // Remaining percentage
 
   String essentialsMessage = '';
   String wantsMessage = '';
   String savingsMessage = '';
 
-  int income = 0; 
+  int income = 0;
 
   @override
   void initState() {
@@ -31,64 +31,131 @@ class _HomeState extends State<Home> {
     getUpdateData();
   }
 
-Future<void> getUpdateData() async {
-  // Grab int values from each table
-  int fetchedIncome = await dbHelper.sumIncome(); 
-  int essential = await dbHelper.sumEssentials();
-  int wants = await dbHelper.sumWants();
-  int savings = await dbHelper.sumSavings();
+  Future<void> getUpdateData() async {
+    // Grab int values from each table
+    int fetchedIncome = await dbHelper.sumIncome();
+    int essential = await dbHelper.sumEssentials();
+    int wants = await dbHelper.sumWants();
+    int savings = await dbHelper.sumSavings();
 
-  setState(() {
-    income = fetchedIncome; // Assign the fetched income to the instance variable
-    // Gathers the percentage of each value to add into pie chart later
-    if (income != 0) {
-      value1 = (essential.toDouble() / income.toDouble()) * 100;
-      value2 = (wants.toDouble() / income.toDouble()) * 100;
-      value3 = (savings.toDouble() / income.toDouble()) * 100;
-      value4 = 100 - (value1 + value2 + value3);
+    setState(() {
+      income = fetchedIncome; // Assign the fetched income to the instance variable
 
-      // Test to see if user is over or under budget
-      double essentialsLimit = 50.0;
-      double wantsLimit = 30.0;
-      double savingsLimit = 20.0;
+      // Gathers the percentage of each value to add into pie chart later
+      if (income != 0) {
+        value1 = (essential.toDouble() / income.toDouble()) * 100;
+        value2 = (wants.toDouble() / income.toDouble()) * 100;
+        value3 = (savings.toDouble() / income.toDouble()) * 100;
+
+        double totalPercentage = value1 + value2 + value3;
+        value4 = 100 - totalPercentage;
+
+        // Ensure value4 is not negative
+        if (value4 < 0) {
+          value4 = 0;
+        }
+
+        // Test to see if user is over or under budget
+        double essentialsLimit = 50.0;
+        double wantsLimit = 30.0;
+        double savingsLimit = 20.0;
 
         // Essentials Text if statement
         if (value1 > essentialsLimit) {
-          essentialsMessage = "You're Spending ${(value1 - essentialsLimit).toStringAsFixed(1)}% over the limit";
+          essentialsMessage =
+              "You're spending ${(value1 - essentialsLimit).toStringAsFixed(1)}% over the essentials target";
         } else if (value1 < essentialsLimit) {
-          essentialsMessage = "You've spent less than essentials target by ${(essentialsLimit - value1).toStringAsFixed(1)}%";
+          essentialsMessage =
+              "You've spent less than essentials target by ${(essentialsLimit - value1).toStringAsFixed(1)}%";
         } else {
-          essentialsMessage = "You're on Track";
+          essentialsMessage = "You're on track";
         }
 
         // Wants Text if statement
         if (value2 > wantsLimit) {
-          wantsMessage = "You're Spending ${(value2 - wantsLimit).toStringAsFixed(1)}% over the limit";
+          wantsMessage =
+              "You're spending ${(value2 - wantsLimit).toStringAsFixed(1)}% over the wants target";
         } else if (value2 < wantsLimit) {
-          wantsMessage = "You've spent less than wants target by ${(wantsLimit - value2).toStringAsFixed(1)}%";
+          wantsMessage =
+              "You've spent less than wants target by ${(wantsLimit - value2).toStringAsFixed(1)}%";
         } else {
-          wantsMessage = "You're on Track";
+          wantsMessage = "You're on track";
         }
 
-      // Savings Text if statement
-      if (value3 < savingsLimit) {
-        savingsMessage = "You're Saving ${(savingsLimit - value3).toStringAsFixed(1)}% less than you should be";
-      } else if (value3 > savingsLimit) {
-        savingsMessage = "You're Saving ${(value3 - savingsLimit).toStringAsFixed(1)}% more";
+        // Savings Text if statement
+        if (value3 < savingsLimit) {
+          savingsMessage =
+              "You're saving ${(savingsLimit - value3).toStringAsFixed(1)}% less than you should be";
+        } else if (value3 > savingsLimit) {
+          savingsMessage =
+              "You're saving ${(value3 - savingsLimit).toStringAsFixed(1)}% over the savings target";
+        } else {
+          savingsMessage = "You're on track";
+        }
       } else {
-        savingsMessage = "You're on Track";
+        value1 = value2 = value3 = value4 = 0;
+        essentialsMessage = 'No data';
+        wantsMessage = 'No data';
+        savingsMessage = 'No data';
       }
-    } else {
-      value1 = value2 = value3 = value4 = 0;
-      essentialsMessage = 'No data';
-      wantsMessage = 'No data';
-      savingsMessage = 'No data';
+    });
+  }
+
+  List<PieChartSectionData> buildPieChartSections() {
+    List<PieChartSectionData> sections = [];
+
+    if (value1 > 0) {
+      sections.add(PieChartSectionData(
+        value: value1,
+        color: const Color.fromARGB(255, 47, 139, 215),
+        title: 'Essentials\n${value1.toStringAsFixed(1)}%',
+        radius: 80,
+        titlePositionPercentageOffset: 0.6,
+        titleStyle: TextStyle(fontSize: 14, color: Colors.black),
+      ));
     }
-  });
-}
+
+    if (value2 > 0) {
+      sections.add(PieChartSectionData(
+        value: value2,
+        color: const Color.fromARGB(255, 221, 61, 55),
+        title: 'Wants\n${value2.toStringAsFixed(1)}%',
+        radius: 80,
+        titlePositionPercentageOffset: 0.6,
+        titleStyle: TextStyle(fontSize: 14, color: Colors.black),
+      ));
+    }
+
+    if (value3 > 0) {
+      sections.add(PieChartSectionData(
+        value: value3,
+        color: const Color.fromARGB(255, 255, 235, 57),
+        title: 'Savings\n${value3.toStringAsFixed(1)}%',
+        radius: 80,
+        titlePositionPercentageOffset: 0.6,
+        titleStyle: TextStyle(fontSize: 14, color: Colors.black),
+      ));
+    }
+
+    // Only add the 'Remaining' section if value4 is positive and greater than zero
+    if (value4 > 0) {
+      sections.add(PieChartSectionData(
+        value: value4,
+        color: const Color.fromARGB(255, 127, 127, 127),
+        title: 'Remaining\n${value4.toStringAsFixed(1)}%',
+        radius: 80,
+        titlePositionPercentageOffset: 0.6,
+        titleStyle: TextStyle(fontSize: 14, color: Colors.black),
+      ));
+    }
+
+    return sections;
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<PieChartSectionData> pieChartSections = buildPieChartSections();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -113,11 +180,13 @@ Future<void> getUpdateData() async {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: ElevatedButton(onPressed:  () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUp()));
-            }, 
-            child: 
-              const Icon(Icons.edit))
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const SignUp()));
+              },
+              child: const Icon(Icons.edit),
+            ),
           ),
           SizedBox(
             height: 400,
@@ -125,54 +194,28 @@ Future<void> getUpdateData() async {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                PieChart(
-                  PieChartData(
-                    sections: [
-                      PieChartSectionData(
-                        value: value1,
-                        color: const Color.fromARGB(255, 47, 139, 215),
-                        title: 'Essentials\n${value1.toStringAsFixed(1)}%',
-                        radius: 50,
-                        titlePositionPercentageOffset: 1.8,
-                      ),
-                      PieChartSectionData(
-                        value: value2,
-                        color: const Color.fromARGB(255, 221, 61, 55),
-                        title: 'Wants\n${value2.toStringAsFixed(1)}%',
-                        radius: 50,
-                        titlePositionPercentageOffset: 1.8,
-                      ),
-                      PieChartSectionData(
-                        value: value3,
-                        color: const Color.fromARGB(255, 255, 235, 57),
-                        title: 'Savings\n${value3.toStringAsFixed(1)}%',
-                        radius: 50,
-                        titlePositionPercentageOffset: 1.8,
-                      ),
-                      PieChartSectionData(
-                        value: value4,
-                        color: const Color.fromARGB(255, 127, 127, 127),
-                        title: 'Remaining\n${value4.toStringAsFixed(1)}%',
-                        radius: 50,
-                        titlePositionPercentageOffset: 1.8,
-                      ),
-                    ],
-                    sectionsSpace: 2,
-                    centerSpaceRadius: 90,
-                  ),
-                ),
+                pieChartSections.isNotEmpty
+                    ? PieChart(
+                        PieChartData(
+                          sections: pieChartSections,
+                          sectionsSpace: 2,
+                          centerSpaceRadius: 50,
+                        ),
+                      )
+                    : Center(child: Text('No data available')),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       'Income',
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                        '\$${income.toString()}',
-                      style: const TextStyle(fontSize: 18, color: Colors.black54),
+                      '\$${income.toString()}',
+                      style:
+                          const TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                   ],
                 ),

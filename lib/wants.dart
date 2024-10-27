@@ -16,6 +16,10 @@ class _WantState extends State<Want> {
   List<Map<String, dynamic>> wantsList = [];
   List<PieChartSectionData> pieChartSections = [];
   double totalAmount = 0;
+  int income = 0;
+  double targetAmount = 0;
+  double difference = 0;
+  String budgetMessage = '';
 
   @override
   void initState() {
@@ -25,9 +29,31 @@ class _WantState extends State<Want> {
 
   Future<void> getWantsData() async {
     wantsList = await dbHelper.queryWants();
+    income = await dbHelper.sumIncome(); // Fetch total income
 
     setState(() {
       totalAmount = wantsList.fold(0, (sum, item) => sum + item['amount']);
+
+      // Compute target amount for wants (30% of income)
+      targetAmount = income * 0.30;
+
+      // Compute difference between actual amount and target amount
+      difference = totalAmount - targetAmount;
+
+      // Create budget message
+      if (income > 0) {
+        if (difference < 0) {
+          budgetMessage =
+              "You are under budget for wants. You can spend \$${difference.abs().toStringAsFixed(2)} more.";
+        } else if (difference > 0) {
+          budgetMessage =
+              "You are \$${difference.toStringAsFixed(2)} over budget. Adjust your spending to meet your target.";
+        } else {
+          budgetMessage = "You are on budget for wants.";
+        }
+      } else {
+        budgetMessage = "Please enter your income to see budget details.";
+      }
 
       if (totalAmount > 0) {
         pieChartSections = wantsList.asMap().entries.map((entry) {
@@ -39,9 +65,9 @@ class _WantState extends State<Want> {
             value: percentage,
             color: getColor(index),
             title: '${item['name']}\n${percentage.toStringAsFixed(1)}%',
-            radius: 50,
-            titlePositionPercentageOffset: 1.6,
-            titleStyle: TextStyle(fontSize: 12, color: Colors.black),
+            radius: 80, // Increased radius
+            titlePositionPercentageOffset: 0.6, // Adjusted offset
+            titleStyle: TextStyle(fontSize: 14, color: Colors.black),
           );
         }).toList();
       } else {
@@ -90,20 +116,26 @@ class _WantState extends State<Want> {
       ),
       body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         SizedBox(
-          height: 400,
+          height: 400, // Increased height from 300 to 400
           width: double.infinity,
           child: pieChartSections.isNotEmpty
               ? PieChart(
                   PieChartData(
                     sections: pieChartSections,
                     sectionsSpace: 2,
-                    centerSpaceRadius: 80,
+                    centerSpaceRadius: 50, // Adjusted center space radius
                   ),
                 )
               : Center(child: Text('No data available')),
         ),
         SizedBox(height: 5),
         Container(height: 2, color: Colors.black, width: double.infinity),
+        SizedBox(height: 20),
+        Text(
+          budgetMessage,
+          style: TextStyle(fontSize: 18),
+          textAlign: TextAlign.center,
+        ),
         SizedBox(height: 20),
         Expanded(
           child: ListView.builder(

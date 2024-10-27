@@ -16,6 +16,10 @@ class _EssentialState extends State<Essential> {
   List<Map<String, dynamic>> essentialsList = [];
   List<PieChartSectionData> pieChartSections = [];
   double totalAmount = 0;
+  int income = 0;
+  double targetAmount = 0;
+  double difference = 0;
+  String budgetMessage = '';
 
   @override
   void initState() {
@@ -25,10 +29,32 @@ class _EssentialState extends State<Essential> {
 
   Future<void> getEssentialsData() async {
     essentialsList = await dbHelper.queryEssentials();
+    income = await dbHelper.sumIncome(); // Fetch total income
 
     setState(() {
       totalAmount =
           essentialsList.fold(0, (sum, item) => sum + item['amount']);
+
+      // Compute target amount for essentials (50% of income)
+      targetAmount = income * 0.50;
+
+      // Compute difference between actual amount and target amount
+      difference = totalAmount - targetAmount;
+
+      // Create budget message
+      if (income > 0) {
+        if (difference < 0) {
+          budgetMessage =
+              "You are under budget for essentials. You can spend \$${difference.abs().toStringAsFixed(2)} more.";
+        } else if (difference > 0) {
+          budgetMessage =
+              "You are \$${difference.toStringAsFixed(2)} over budget. Adjust your spending to meet your target.";
+        } else {
+          budgetMessage = "You are on budget for essentials.";
+        }
+      } else {
+        budgetMessage = "Please enter your income to see budget details.";
+      }
 
       if (totalAmount > 0) {
         pieChartSections = essentialsList.asMap().entries.map((entry) {
@@ -40,9 +66,9 @@ class _EssentialState extends State<Essential> {
             value: percentage,
             color: getColor(index),
             title: '${item['name']}\n${percentage.toStringAsFixed(1)}%',
-            radius: 50,
-            titlePositionPercentageOffset: 1.6,
-            titleStyle: TextStyle(fontSize: 12, color: Colors.black),
+            radius: 80, // Increased radius
+            titlePositionPercentageOffset: 0.6, // Adjusted offset
+            titleStyle: TextStyle(fontSize: 14, color: Colors.black),
           );
         }).toList();
       } else {
@@ -92,7 +118,7 @@ class _EssentialState extends State<Essential> {
       ),
       body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         SizedBox(
-          height: 400,
+          height: 400, // Increased height from 300 to 400
           width: double.infinity,
           // Piechart data and UI
           child: pieChartSections.isNotEmpty
@@ -100,7 +126,7 @@ class _EssentialState extends State<Essential> {
                   PieChartData(
                     sections: pieChartSections,
                     sectionsSpace: 2,
-                    centerSpaceRadius: 80,
+                    centerSpaceRadius: 50, // Adjusted center space radius
                   ),
                 )
               : Center(child: Text('No data available')),
@@ -108,6 +134,12 @@ class _EssentialState extends State<Essential> {
         SizedBox(height: 5),
         // Black line between Pie chart and Text information
         Container(height: 2, color: Colors.black, width: double.infinity),
+        SizedBox(height: 20),
+        Text(
+          budgetMessage,
+          style: TextStyle(fontSize: 18),
+          textAlign: TextAlign.center,
+        ),
         SizedBox(height: 20),
         Expanded(
           // List of essential entries
