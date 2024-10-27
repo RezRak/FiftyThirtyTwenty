@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'home.dart';
 import 'savings.dart';
-import 'needs.dart';
+import 'needs.dart'; // Assuming 'needs.dart' corresponds to essentials
 
 class Want extends StatefulWidget {
   const Want({super.key});
@@ -13,68 +13,58 @@ class Want extends StatefulWidget {
 }
 
 class _WantState extends State<Want> {
-  double value1 = 0;
-  double value2 = 0;
-  double value3 = 0;
-  double value4 = 0;
-
-  String essentialsMessage = '';
-  String wantsMessage = '';
-  String savingsMessage = '';
+  List<Map<String, dynamic>> wantsList = [];
+  List<PieChartSectionData> pieChartSections = [];
+  double totalAmount = 0;
 
   @override
   void initState() {
     super.initState();
-    getUpdateData();
+    getWantsData();
   }
 
-  Future<void> getUpdateData() async {
-    int income = await dbHelper.sumIncome();
-    int essential = await dbHelper.sumEssentials();
-    int wants = await dbHelper.sumWants();
-    int savings = await dbHelper.sumSavings();
+  Future<void> getWantsData() async {
+    wantsList = await dbHelper.queryWants();
 
     setState(() {
-      if (income != 0) {
-        value1 = (essential.toDouble() / income.toDouble()) * 100;
-        value2 = (wants.toDouble() / income.toDouble()) * 100;
-        value3 = (savings.toDouble() / income.toDouble()) * 100;
-        value4 = 100 - (value1 + value2 + value3);
+      totalAmount = wantsList.fold(0, (sum, item) => sum + item['amount']);
 
-        double essentialsLimit = 50.0;
-        double wantsLimit = 30.0;
-        double savingsLimit = 20.0;
+      if (totalAmount > 0) {
+        pieChartSections = wantsList.asMap().entries.map((entry) {
+          int index = entry.key;
+          Map<String, dynamic> item = entry.value;
+          final percentage = (item['amount'] / totalAmount) * 100;
 
-        if (value1 > essentialsLimit) {
-          essentialsMessage = "You're Spending ${(value1 - essentialsLimit).toStringAsFixed(1)}% over the limit";
-        } else if (value1 < essentialsLimit) {
-          essentialsMessage = "You've lessened your spending by ${(essentialsLimit - value1).toStringAsFixed(1)}%";
-        } else {
-          essentialsMessage = "You're on Track";
-        }
-
-        if (value2 > wantsLimit) {
-          wantsMessage = "You're Spending ${(value2 - wantsLimit).toStringAsFixed(1)}% over the limit";
-        } else if (value2 < wantsLimit) {
-          wantsMessage = "You've lessened your spending by ${(wantsLimit - value2).toStringAsFixed(1)}%";
-        } else {
-          wantsMessage = "You're on Track";
-        }
-
-        if (value3 < savingsLimit) {
-          savingsMessage = "You're Saving ${(savingsLimit - value3).toStringAsFixed(1)}% less than you should be";
-        } else if (value3 > savingsLimit) {
-          savingsMessage = "You're Saving ${(value3 - savingsLimit).toStringAsFixed(1)}% more";
-        } else {
-          savingsMessage = "You're on Track";
-        }
+          return PieChartSectionData(
+            value: percentage,
+            color: getColor(index),
+            title: '${item['name']}\n${percentage.toStringAsFixed(1)}%',
+            radius: 50,
+            titlePositionPercentageOffset: 1.6,
+            titleStyle: TextStyle(fontSize: 12, color: Colors.black),
+          );
+        }).toList();
       } else {
-        value1 = value2 = value3 = value4 = 0;
-        essentialsMessage = 'No data';
-        wantsMessage = 'No data';
-        savingsMessage = 'No data';
+        pieChartSections = [];
       }
     });
+  }
+
+  List<Color> predefinedColors = [
+    Colors.blue,
+    Colors.red,
+    Colors.green,
+    Colors.orange,
+    Colors.purple,
+    Colors.yellow,
+    Colors.teal,
+    Colors.brown,
+    Colors.cyan,
+    Colors.indigo,
+  ];
+
+  Color getColor(int index) {
+    return predefinedColors[index % predefinedColors.length];
   }
 
   @override
@@ -83,13 +73,10 @@ class _WantState extends State<Want> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(4.0), 
-          child: Container(
-            color: Colors.black,
-            height: 2.0
-          )),
+            preferredSize: const Size.fromHeight(4.0),
+            child: Container(color: Colors.black, height: 2.0)),
         backgroundColor: Colors.white,
-        title: Text("Wants"),
+        title: Text("Wants", style: TextStyle(color: Colors.black)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
@@ -101,138 +88,88 @@ class _WantState extends State<Want> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            height: 500,
-            width: double.infinity,
-            child: PieChart(
-              PieChartData(
-                sections: [
-                  PieChartSectionData(
-                    value: value1,
-                    color: const Color.fromARGB(255, 47, 139, 215),
-                    title: 'Essentials\n${value1.toStringAsFixed(1)}%',
-                    radius: 50,
-                    titlePositionPercentageOffset: 1.8,
+      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        SizedBox(
+          height: 400,
+          width: double.infinity,
+          child: pieChartSections.isNotEmpty
+              ? PieChart(
+                  PieChartData(
+                    sections: pieChartSections,
+                    sectionsSpace: 2,
+                    centerSpaceRadius: 80,
                   ),
-                  PieChartSectionData(
-                    value: value2,
-                    color: const Color.fromARGB(255, 221, 61, 55),
-                    title: 'Wants\n${value2.toStringAsFixed(1)}%',
-                    radius: 50,
-                    titlePositionPercentageOffset: 1.8,
-                  ),
-                  PieChartSectionData(
-                    value: value3,
-                    color: const Color.fromARGB(255, 255, 235, 57),
-                    title: 'Savings\n${value3.toStringAsFixed(1)}%',
-                    radius: 50,
-                    titlePositionPercentageOffset: 1.8,
-                  ),
-                  PieChartSectionData(
-                    value: value4,
-                    color: const Color.fromARGB(255, 127, 127, 127),
-                    title: 'Remaining\n${value4.toStringAsFixed(1)}%',
-                    radius: 50,
-                    titlePositionPercentageOffset: 1.8,
-                  ),
-                ],
-                sectionsSpace: 2,
-                centerSpaceRadius: 90,
+                )
+              : Center(child: Text('No data available')),
+        ),
+        SizedBox(height: 5),
+        Container(height: 2, color: Colors.black, width: double.infinity),
+        SizedBox(height: 20),
+        Expanded(
+          child: ListView.builder(
+            itemCount: wantsList.length,
+            itemBuilder: (context, index) {
+              final item = wantsList[index];
+              final percentage = (item['amount'] / totalAmount) * 100;
+
+              return ListTile(
+                title: Text('${item['name']}: \$${item['amount']}'),
+                subtitle:
+                    Text('${percentage.toStringAsFixed(1)}% of total wants'),
+              );
+            },
+          ),
+        ),
+        Container(height: 2, color: Colors.black, width: double.infinity),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Home()),
+                );
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.transparent,
               ),
+              child: const Icon(Icons.home),
             ),
-          ),
-          SizedBox(height: 5),
-          Container(
-            height: 2,
-            color: Colors.black,
-            width: double.infinity
-          ),
-          SizedBox(height: 50),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              children: [
-                Text(
-                  essentialsMessage,
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 30),
-                Text(
-                  wantsMessage,
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 30),
-                Text(
-                  savingsMessage,
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Essential()),
+                );
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.transparent,
+              ),
+              child: const Icon(Icons.business),
             ),
-          ),         
-          SizedBox(height: 60),
-          Container(
-            height: 2,
-            color: Colors.black,
-            width: double.infinity,
-          ),
-          Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Home()),
-                  );
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                ),
-                child: const Icon(Icons.home),
+            TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.transparent,
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Essential()),
-                  );
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                ),
-                child: const Icon(Icons.business),
+              child: const Icon(Icons.favorite),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Saving()),
+                );
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.transparent,
               ),
-              TextButton(
-                onPressed: () {
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                ),
-                child: const Icon(Icons.favorite),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Saving()),
-                  );
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                ),
-                child: const Icon(Icons.attach_money),
-              ),
-            ],
-          ),
-        ]
-      )
+              child: const Icon(Icons.attach_money),
+            ),
+          ],
+        ),
+      ]),
     );
   }
 }
