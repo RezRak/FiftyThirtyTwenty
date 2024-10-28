@@ -63,34 +63,34 @@ class _HomeState extends State<Home> {
         // Essentials Text if statement
         if (value1 > essentialsLimit) {
           essentialsMessage =
-              "You're spending ${(value1 - essentialsLimit).toStringAsFixed(1)}% over the essentials target";
+              "Eessentials is less than projected by:  ${(value1 - essentialsLimit).toStringAsFixed(1)}%";
         } else if (value1 < essentialsLimit) {
           essentialsMessage =
-              "You've spent less than essentials target by ${(essentialsLimit - value1).toStringAsFixed(1)}%";
+              "Eessentials is more than projected by: ${(essentialsLimit - value1).toStringAsFixed(1)}%";
         } else {
-          essentialsMessage = "You're on track";
+          essentialsMessage = "Essentials projected Amount: ${(value1).toStringAsFixed(1)}%";
         }
 
         // Wants Text if statement
         if (value2 > wantsLimit) {
           wantsMessage =
-              "You're spending ${(value2 - wantsLimit).toStringAsFixed(1)}% over the wants target";
+              "Wants is less than projected by: ${(value2 - wantsLimit).toStringAsFixed(1)}%";
         } else if (value2 < wantsLimit) {
           wantsMessage =
-              "You've spent less than wants target by ${(wantsLimit - value2).toStringAsFixed(1)}%";
+              "Wants is more than projected by: ${(wantsLimit - value2).toStringAsFixed(1)}%";
         } else {
-          wantsMessage = "You're on track";
+          wantsMessage = "Wants projected Amount: ${(value2).toStringAsFixed(1)}%";
         }
 
         // Savings Text if statement
         if (value3 < savingsLimit) {
           savingsMessage =
-              "You're saving ${(savingsLimit - value3).toStringAsFixed(1)}% less than you should be";
+              "Saving less than projected by: ${(savingsLimit - value3).toStringAsFixed(1)}%";
         } else if (value3 > savingsLimit) {
           savingsMessage =
-              "You're saving ${(value3 - savingsLimit).toStringAsFixed(1)}% over the savings target";
+              "Saving more than projected by: ${(value3 - savingsLimit).toStringAsFixed(1)}%";
         } else {
-          savingsMessage = "You're on track";
+          savingsMessage = "Saving projected Amount: ${(value3).toStringAsFixed(1)}";
         }
       } else {
         value1 = value2 = value3 = value4 = 0;
@@ -107,7 +107,7 @@ class _HomeState extends State<Home> {
     if (value1 > 0) {
       sections.add(PieChartSectionData(
         value: value1,
-        color: const Color.fromARGB(255, 47, 139, 215),
+        color: Color.fromARGB(255, 135, 186, 214),
         title: 'Essentials\n${value1.toStringAsFixed(1)}%',
         radius: 80,
         titlePositionPercentageOffset: 0.6,
@@ -118,7 +118,7 @@ class _HomeState extends State<Home> {
     if (value2 > 0) {
       sections.add(PieChartSectionData(
         value: value2,
-        color: const Color.fromARGB(255, 221, 61, 55),
+        color: Color.fromARGB(255, 230, 198, 75),
         title: 'Wants\n${value2.toStringAsFixed(1)}%',
         radius: 80,
         titlePositionPercentageOffset: 0.6,
@@ -129,7 +129,7 @@ class _HomeState extends State<Home> {
     if (value3 > 0) {
       sections.add(PieChartSectionData(
         value: value3,
-        color: const Color.fromARGB(255, 255, 235, 57),
+        color: Color.fromARGB(255, 143, 196, 143),
         title: 'Savings\n${value3.toStringAsFixed(1)}%',
         radius: 80,
         titlePositionPercentageOffset: 0.6,
@@ -141,7 +141,7 @@ class _HomeState extends State<Home> {
     if (value4 > 0) {
       sections.add(PieChartSectionData(
         value: value4,
-        color: const Color.fromARGB(255, 127, 127, 127),
+        color: const Color.fromARGB(255, 200, 200, 180),
         title: 'Remaining\n${value4.toStringAsFixed(1)}%',
         radius: 80,
         titlePositionPercentageOffset: 0.6,
@@ -178,15 +178,25 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const SignUp()));
-              },
-              child: const Icon(Icons.edit),
-            ),
+          const SizedBox(width: 50),
+          SizedBox(height: 20),
+          Text(
+            "Welcome!",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            "This is your total spending summary",
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+            textAlign: TextAlign.center,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const SignUp()));
+            },
+            child: const Icon(Icons.edit),
           ),
           SizedBox(
             height: 400,
@@ -223,8 +233,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           const SizedBox(height: 5),
-          Container(height: 2, color: Colors.black, width: double.infinity),
-          const SizedBox(height: 30),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -249,47 +258,59 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
-          const SizedBox(height: 25),
-          Container(height: 2, color: Colors.black, width: double.infinity),
-          const Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextButton(
-                onPressed: () {},
-                child: const Icon(Icons.home),
+        const Spacer(),
+        Container(height: 2, color: Colors.black, width: double.infinity),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            TextButton(
+              onPressed: () {
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: const Color.fromARGB(40, 49, 49, 49),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Essential()),
-                  );
-                },
-                child: const Icon(Icons.business),
+              child: const Icon(Icons.home),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Essential()),
+                );
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.transparent,
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Want()),
-                  );
-                },
-                child: const Icon(Icons.favorite),
+              child: const Icon(Icons.business),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Want()),
+            );
+            },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.transparent,
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Saving()),
-                  );
-                },
-                child: const Icon(Icons.attach_money),
+              child: const Icon(Icons.favorite),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Saving()),
+                );
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.transparent,
               ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+              child: const Icon(Icons.attach_money),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
 }

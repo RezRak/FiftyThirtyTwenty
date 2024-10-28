@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'home.dart';
 import 'savings.dart';
-import 'needs.dart'; // Assuming 'needs.dart' corresponds to essentials
+import 'needs.dart';
+import 'signup.dart';
 
 class Want extends StatefulWidget {
   const Want({super.key});
@@ -77,66 +78,106 @@ class _WantState extends State<Want> {
   }
 
   List<Color> predefinedColors = [
-    Colors.blue,
-    Colors.red,
-    Colors.green,
-    Colors.orange,
-    Colors.purple,
-    Colors.yellow,
-    Colors.teal,
-    Colors.brown,
-    Colors.cyan,
-    Colors.indigo,
+    Color.fromARGB(255, 255, 223, 100),
+    Color.fromARGB(255, 240, 210, 90),
+    Color.fromARGB(255, 230, 198, 75),
+    Color.fromARGB(255, 215, 180, 60),
+    Color.fromARGB(255, 195, 160, 50),
+    Color.fromARGB(255, 175, 145, 55),
+    Color.fromARGB(255, 150, 120, 50),
+    Color.fromARGB(255, 130, 105, 60),
+    Color.fromARGB(255, 110, 90, 65),
+    Color.fromARGB(255, 90, 75, 55),
   ];
 
   Color getColor(int index) {
     return predefinedColors[index % predefinedColors.length];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    appBar: AppBar(
+      bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0),
+          child: Container(color: Colors.black, height: 2.0)),
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(4.0),
-            child: Container(color: Colors.black, height: 2.0)),
-        backgroundColor: Colors.white,
-        title: Text("Wants", style: TextStyle(color: Colors.black)),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Image.asset(
-              'Image/FTT.png',
-              height: 40,
-              width: 40,
-            ),
+      title: Text("Wants", style: TextStyle(color: Colors.black)),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: Image.asset(
+            'Image/FTT.png',
+            height: 40,
+            width: 40,
           ),
-        ],
-      ),
-      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        SizedBox(
-          height: 400, // Increased height from 300 to 400
-          width: double.infinity,
-          child: pieChartSections.isNotEmpty
-              ? PieChart(
-                  PieChartData(
-                    sections: pieChartSections,
-                    sectionsSpace: 2,
-                    centerSpaceRadius: 50, // Adjusted center space radius
-                  ),
-                )
-              : Center(child: Text('No data available')),
         ),
-        SizedBox(height: 5),
-        Container(height: 2, color: Colors.black, width: double.infinity),
+      ],
+    ),
+    body: Column( mainAxisAlignment: MainAxisAlignment.start,
+      children: [
         SizedBox(height: 20),
+        Text(
+          "Wants",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 10),
+        Text(
+          "This is your spending summary in wants",
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+          textAlign: TextAlign.center,
+        ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const SignUp()));
+            },
+            child: const Icon(Icons.edit),
+          ),
+        SizedBox(height: 5),
+        SizedBox(
+          height: 400,
+          width: double.infinity,
+          child: Stack(
+              alignment: Alignment.center,
+              children: [
+                pieChartSections.isNotEmpty
+                    ? PieChart(
+                        PieChartData(
+                          sections: pieChartSections,
+                          sectionsSpace: 2,
+                          centerSpaceRadius: 50,
+                        ),
+                      )
+              : Center(child: Text('No data available')),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Wants',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '\$${totalAmount.toStringAsFixed(2)}',
+                      style:
+                          const TextStyle(fontSize: 18, color: Colors.black54),
+                    ),
+                  ],
+                ),
+      ]
+      ),
+        ),
+        SizedBox(height: 3),
         Text(
           budgetMessage,
           style: TextStyle(fontSize: 18),
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 10),
         Expanded(
           child: ListView.builder(
             itemCount: wantsList.length,
@@ -183,7 +224,7 @@ class _WantState extends State<Want> {
             TextButton(
               onPressed: () {},
               style: TextButton.styleFrom(
-                backgroundColor: Colors.transparent,
+                backgroundColor: const Color.fromARGB(40, 49, 49, 49),
               ),
               child: const Icon(Icons.favorite),
             ),
@@ -201,7 +242,8 @@ class _WantState extends State<Want> {
             ),
           ],
         ),
-      ]),
-    );
-  }
+      ],
+    ),
+  );
+}
 }

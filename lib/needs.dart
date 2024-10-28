@@ -4,6 +4,7 @@ import 'main.dart';
 import 'home.dart';
 import 'savings.dart';
 import 'wants.dart';
+import 'signup.dart';
 
 class Essential extends StatefulWidget {
   const Essential({super.key});
@@ -28,29 +29,23 @@ class _EssentialState extends State<Essential> {
   }
 
   Future<void> getEssentialsData() async {
-    essentialsList = await dbHelper.queryEssentials();
-    income = await dbHelper.sumIncome(); // Fetch total income
+    essentialsList = await dbHelper.queryEssentials(); // Fetch needs data
+    income = await dbHelper.sumIncome();
 
     setState(() {
-      totalAmount =
-          essentialsList.fold(0, (sum, item) => sum + item['amount']);
-
-      // Compute target amount for essentials (50% of income)
-      targetAmount = income * 0.50;
-
-      // Compute difference between actual amount and target amount
+      totalAmount = essentialsList.fold(0, (sum, item) => sum + item['amount']);
+      targetAmount = income * 0.50; // 50% target for needs
       difference = totalAmount - targetAmount;
 
-      // Create budget message
       if (income > 0) {
         if (difference < 0) {
           budgetMessage =
-              "You are under budget for essentials. You can spend \$${difference.abs().toStringAsFixed(2)} more.";
+              "You are under budget for needs. You can spend \$${difference.abs().toStringAsFixed(2)} more.";
         } else if (difference > 0) {
           budgetMessage =
               "You are \$${difference.toStringAsFixed(2)} over budget. Adjust your spending to meet your target.";
         } else {
-          budgetMessage = "You are on budget for essentials.";
+          budgetMessage = "You are on budget for needs.";
         }
       } else {
         budgetMessage = "Please enter your income to see budget details.";
@@ -66,8 +61,8 @@ class _EssentialState extends State<Essential> {
             value: percentage,
             color: getColor(index),
             title: '${item['name']}\n${percentage.toStringAsFixed(1)}%',
-            radius: 80, // Increased radius
-            titlePositionPercentageOffset: 0.6, // Adjusted offset
+            radius: 80,
+            titlePositionPercentageOffset: 0.6,
             titleStyle: TextStyle(fontSize: 14, color: Colors.black),
           );
         }).toList();
@@ -78,71 +73,106 @@ class _EssentialState extends State<Essential> {
   }
 
   List<Color> predefinedColors = [
-    Colors.blue,
-    Colors.red,
-    Colors.green,
-    Colors.orange,
-    Colors.purple,
-    Colors.yellow,
-    Colors.teal,
-    Colors.brown,
-    Colors.cyan,
-    Colors.indigo,
+    Color.fromARGB(255, 173, 216, 230),
+    Color.fromARGB(255, 158, 202, 225),
+    Color.fromARGB(255, 135, 186, 214),
+    Color.fromARGB(255, 109, 167, 201),
+    Color.fromARGB(255, 84, 150, 186),
+    Color.fromARGB(255, 67, 133, 174),
+    Color.fromARGB(255, 52, 119, 161),
+    Color.fromARGB(255, 38, 103, 145),
+    Color.fromARGB(255, 28, 82, 121),
+    Color.fromARGB(255, 19, 63, 96),
   ];
 
   Color getColor(int index) {
     return predefinedColors[index % predefinedColors.length];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.white,
+    appBar: AppBar(
+      bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0),
+          child: Container(color: Colors.black, height: 2.0)),
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(4.0),
-            child: Container(color: Colors.black, height: 2.0)),
-        backgroundColor: Colors.white,
-        title: Text("Essentials", style: TextStyle(color: Colors.black)),
-        actions: [
-          // Adds the logo on the appbar
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Image.asset(
-              'Image/FTT.png',
-              height: 40,
-              width: 40,
-            ),
+      title: Text("Savings", style: TextStyle(color: Colors.black)),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: Image.asset(
+            'Image/FTT.png',
+            height: 40,
+            width: 40,
           ),
-        ],
-      ),
-      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        SizedBox(
-          height: 400, // Increased height from 300 to 400
-          width: double.infinity,
-          // Piechart data and UI
-          child: pieChartSections.isNotEmpty
-              ? PieChart(
-                  PieChartData(
-                    sections: pieChartSections,
-                    sectionsSpace: 2,
-                    centerSpaceRadius: 50, // Adjusted center space radius
-                  ),
-                )
-              : Center(child: Text('No data available')),
+        ),
+      ],
+    ),
+    body: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(height: 20),
+        Text(
+          "Essentials",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 10),
+        Text(
+          "This is your spending summary in Essentials",
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+          textAlign: TextAlign.center,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SignUp()));
+          },
+          child: const Icon(Icons.edit),
         ),
         SizedBox(height: 5),
-        // Black line between Pie chart and Text information
-        Container(height: 2, color: Colors.black, width: double.infinity),
-        SizedBox(height: 20),
+        SizedBox(
+          height: 400,
+          width: double.infinity,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              pieChartSections.isNotEmpty
+                  ? PieChart(
+                      PieChartData(
+                        sections: pieChartSections,
+                        sectionsSpace: 2,
+                        centerSpaceRadius: 50,
+                      ),
+                    )
+                  : Center(child: Text('No data available')),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Essential',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '\$${totalAmount.toStringAsFixed(2)}',
+                    style: const TextStyle(fontSize: 18, color: Colors.black54),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 3),
         Text(
           budgetMessage,
           style: TextStyle(fontSize: 18),
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 20),
+        SizedBox(height: 10),
         Expanded(
-          // List of essential entries
           child: ListView.builder(
             itemCount: essentialsList.length,
             itemBuilder: (context, index) {
@@ -151,15 +181,12 @@ class _EssentialState extends State<Essential> {
 
               return ListTile(
                 title: Text('${item['name']}: \$${item['amount']}'),
-                subtitle: Text(
-                    '${percentage.toStringAsFixed(1)}% of total essentials'),
+                subtitle: Text('${percentage.toStringAsFixed(1)}% of total savings'),
               );
             },
           ),
         ),
-        // Second black line for the bottom button bar
         Container(height: 2, color: Colors.black, width: double.infinity),
-        // Creates buttons for Navigation to other tabs
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -176,9 +203,10 @@ class _EssentialState extends State<Essential> {
               child: const Icon(Icons.home),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+              },
               style: TextButton.styleFrom(
-                backgroundColor: Colors.transparent,
+                backgroundColor: const Color.fromARGB(40, 49, 49, 49),
               ),
               child: const Icon(Icons.business),
             ),
@@ -200,6 +228,7 @@ class _EssentialState extends State<Essential> {
                   context,
                   MaterialPageRoute(builder: (context) => const Saving()),
                 );
+
               },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.transparent,
@@ -208,7 +237,8 @@ class _EssentialState extends State<Essential> {
             ),
           ],
         ),
-      ]),
-    );
-  }
+      ],
+    ),
+  );
+}
 }
