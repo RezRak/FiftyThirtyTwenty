@@ -61,23 +61,23 @@ class _HomeState extends State<Home> {
         double savingsLimit = 20.0;
 
         // Essentials Text if statement
-        if (value1 > essentialsLimit) {
+        if (value1 < essentialsLimit) {
           essentialsMessage =
-              "Eessentials is less than projected by:  ${(value1 - essentialsLimit).toStringAsFixed(1)}%";
-        } else if (value1 < essentialsLimit) {
+              "Eessentials is less than projected by:  ${(essentialsLimit - value1).toStringAsFixed(1)}%";
+        } else if (value1 > essentialsLimit) {
           essentialsMessage =
-              "Eessentials is more than projected by: ${(essentialsLimit - value1).toStringAsFixed(1)}%";
+              "Eessentials is more than projected by: ${(value1 - essentialsLimit).toStringAsFixed(1)}%";
         } else {
           essentialsMessage = "Essentials projected Amount: ${(value1).toStringAsFixed(1)}%";
         }
 
         // Wants Text if statement
-        if (value2 > wantsLimit) {
+        if (value2 < wantsLimit) {
           wantsMessage =
-              "Wants is less than projected by: ${(value2 - wantsLimit).toStringAsFixed(1)}%";
-        } else if (value2 < wantsLimit) {
+              "Wants is less than projected by: ${(wantsLimit - value2).toStringAsFixed(1)}%";
+        } else if (value2 > wantsLimit) {
           wantsMessage =
-              "Wants is more than projected by: ${(wantsLimit - value2).toStringAsFixed(1)}%";
+              "Wants is more than projected by: ${(value2 - wantsLimit).toStringAsFixed(1)}%";
         } else {
           wantsMessage = "Wants projected Amount: ${(value2).toStringAsFixed(1)}%";
         }

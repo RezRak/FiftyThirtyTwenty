@@ -98,7 +98,7 @@ Widget build(BuildContext context) {
           preferredSize: const Size.fromHeight(4.0),
           child: Container(color: Colors.black, height: 2.0)),
       backgroundColor: Colors.white,
-      title: Text("Savings", style: TextStyle(color: Colors.black)),
+      title: Text("Essentials", style: TextStyle(color: Colors.black)),
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
